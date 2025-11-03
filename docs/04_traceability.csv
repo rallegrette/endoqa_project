@@ -1,0 +1,15 @@
+ReqID,Artifact,Details
+REQ-001,Code,lib/metrics.cpp compute_sharpness()
+REQ-001,Test,tests/test_metrics.cpp test_sharp_vs_blurry
+REQ-002,Code,lib/metrics.cpp compute_noise()
+REQ-002,Test,tests/test_metrics.cpp test_noise_nonzero
+REQ-003,Code,lib/metrics.cpp compute_exposure_uniformity()
+REQ-003,Test,tests/test_metrics.cpp test_uniformity_high_on_constant
+REQ-004,Code,lib/metrics.cpp count_stuck_pixels()
+REQ-004,Test,tests/test_metrics.cpp test_stuck_pixel_detection
+REQ-005,Code,lib/metrics.cpp brightness_trend()
+REQ-005,Test,tests/test_metrics.cpp test_brightness_trend_slope_positive
+REQ-006,Code,lib/report.cpp report_to_json()
+REQ-007,Code,lib/report.cpp build_report()
+REQ-008,Code,app/main.cpp CLI
+REQ-009,Tests,tests/test_metrics.cpp
