@@ -1,6 +1,6 @@
 # ENDOQA — Endoscopic Image Quality Checker (C++17 / OpenCV)
 
-A compact, production-quality sample that analyzes image frames for metrics relevant to endoscopy and emits a JSON report with a PASS/FAIL decision.
+EndoQA is a C++ application for evaluating the objective quality of medical-imaging and endoscopic-style frames. The program calculates reproducible metrics such as sharpness, noise, exposure uniformity, brightness stability, and sensor reliability, then produces a structured JSON PASS/FAIL report.
 
 ## Metrics
 - **Sharpness** — Variance of Laplacian (focus measure)
