@@ -7,6 +7,21 @@ It computes reproducible metrics such as **sharpness**, **noise**, **exposure un
 
 This project was inspired by the verification and validation processes used in regulated medical-device software, such as those employed by **Karl Storz**, where image consistency, reliability, and documentation are critical.
 
+## Key Features
+
+- **C++17 / OpenCV implementation** for speed and portability  
+- **Quantitative metrics:**
+  - **Sharpness:** Variance-of-Laplacian measure of edge clarity  
+  - **Noise:** Local variance of pixel intensity  
+  - **Exposure Uniformity:** Brightness variance across image tiles  
+  - **Brightness Trend:** Temporal brightness slope across frames  
+  - **Dead-Pixel Check:** Identifies sensor pixels that remain constant across frames  
+- **JSON report** summarizing metric results and threshold comparisons  
+- **Unit tests** verifying each metric using synthetic images  
+- **Static analysis** using `.clang-tidy` for code safety and consistency  
+- **CMake build system** producing two executables:
+  - `endoqa` – main command-line tool  
+  - `endoqa_tests` – unit-test suite  
 
 
 ## Metrics
