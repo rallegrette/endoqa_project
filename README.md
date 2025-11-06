@@ -9,7 +9,23 @@ EndoQA is a C++ application for evaluating the objective quality of medical-imag
 - **Dead/Stuck Pixels** (multi-frame) — Low variance & extreme mean
 - **Brightness Trend** — Per-frame means + linear slope
 
-## Build
+## Example Output
+{
+  "per_frame": {
+    "brightness_mean": 49.57,
+    "sharpness": 2238.67,
+    "noise": 13.88,
+    "exposure_uniformity": 0.801
+  },
+  "dead_pixels_multi_frame": 76502,
+  "overall": "FAIL",
+  "thresholds": {
+    "minSharpness": 50,
+    "maxNoise": 15,
+    "minExposureUniformity": 0.85
+  }
+}
+
 
 ### Prereqs
 - CMake >= 3.15
