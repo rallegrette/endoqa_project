@@ -31,7 +31,12 @@ This project was inspired by the verification and validation processes used in r
 - **Dead/Stuck Pixels** (multi-frame) — Low variance & extreme mean
 - **Brightness Trend** — Per-frame means + linear slope
 
+
+---
+
 ## Example Output
+
+```json
 {
   "per_frame": {
     "brightness_mean": 49.57,
@@ -47,8 +52,7 @@ This project was inspired by the verification and validation processes used in r
     "minExposureUniformity": 0.85
   }
 }
-
-
+```
 ### Prereqs
 - CMake >= 3.15
 - C++17 compiler
