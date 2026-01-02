@@ -1,36 +1,61 @@
-# ENDOQA — Endoscopic Image Quality Checker (C++17 / OpenCV)
+# EndoQA  
+**Objective Image Quality Analysis for Medical & Endoscopic Imaging**
+
+**Author:** Rose Allegrette  
+**Language:** C++17  
+**Build System:** CMake  
+**Primary Dependency:** OpenCV  
+**Testing:** Doctest  
+**Platform:** macOS / Linux / Windows  
+
+---
 
 ## Overview
 
-**EndoQA** is a C++ application that evaluates the objective quality of medical-imaging and endoscopic-style frames.  
-It computes reproducible metrics such as **sharpness**, **noise**, **exposure uniformity**, **brightness stability**, and **sensor reliability**, then produces a structured **JSON PASS/FAIL report**.
+**EndoQA** is a C++ image-quality analysis tool designed to evaluate the reliability and consistency of medical-imaging frames, such as those produced by endoscopic camera systems.
 
-This project was inspired by the verification and validation processes used in regulated medical-device software, such as those employed by **Karl Storz**, where image consistency, reliability, and documentation are critical.
+The application computes deterministic, objective image-quality metrics and generates a structured **JSON PASS/FAIL report** suitable for automated verification pipelines.  
+The project mirrors real-world medical-device software workflows where **image quality, traceability, and reproducibility** are critical.
 
-## Key Features
+This project is particularly relevant to companies like **Karl Storz**, where software plays a key role in validating optical performance, sensor health, and imaging stability.
 
-- **C++17 / OpenCV implementation** for speed and portability  
-- **Quantitative metrics:**
-  - **Sharpness:** Variance-of-Laplacian measure of edge clarity  
-  - **Noise:** Local variance of pixel intensity  
-  - **Exposure Uniformity:** Brightness variance across image tiles  
-  - **Brightness Trend:** Temporal brightness slope across frames  
-  - **Dead-Pixel Check:** Identifies sensor pixels that remain constant across frames  
-- **JSON report** summarizing metric results and threshold comparisons  
-- **Unit tests** verifying each metric using synthetic images  
-- **Static analysis** using `.clang-tidy` for code safety and consistency  
-- **CMake build system** producing two executables:
-  - `endoqa` – main command-line tool  
-  - `endoqa_tests` – unit-test suite  
+---
 
+## Motivation
 
-## Metrics
-- **Sharpness** — Variance of Laplacian (focus measure)
-- **Noise** — Stddev of (image - GaussianBlur(image))
-- **Exposure Uniformity** — Tiled mean CV mapped to 0..1 (1 is best)
-- **Dead/Stuck Pixels** (multi-frame) — Low variance & extreme mean
-- **Brightness Trend** — Per-frame means + linear slope
+Medical imaging systems must meet strict quality requirements:
 
+- Sharp and well-defined visuals  
+- Stable illumination and exposure  
+- Low sensor noise  
+- Reliable detection of sensor defects  
+- Documented, repeatable validation  
+
+EndoQA demonstrates how software can **quantitatively validate imaging performance**, rather than relying on subjective visual inspection.
+
+---
+
+## Features
+
+### Image Quality Metrics
+- **Sharpness**
+  - Variance of Laplacian to quantify edge clarity
+- **Noise Estimation**
+  - Local pixel variance to detect sensor noise
+- **Exposure Uniformity**
+  - Tile-based brightness analysis across the frame
+- **Brightness Stability**
+  - Temporal brightness trend across frames
+- **Dead Pixel Detection**
+  - Multi-frame consistency analysis to identify sensor defects
+
+### Engineering Practices
+- Deterministic algorithms (reproducible results)
+- Modular C++ design
+- Automated unit tests for each metric
+- Static analysis via `.clang-tidy`
+- JSON-based machine-readable output
+- CMake-based cross-platform build
 
 ---
 
@@ -44,57 +69,118 @@ This project was inspired by the verification and validation processes used in r
     "noise": 13.88,
     "exposure_uniformity": 0.801
   },
+  "brightness_series": [49.57, 49.57],
+  "brightness_slope": 0.0,
   "dead_pixels_multi_frame": 76502,
   "overall": "FAIL",
   "thresholds": {
+    "minBrightness": 10,
+    "maxBrightness": 245,
     "minSharpness": 50,
     "maxNoise": 15,
-    "minExposureUniformity": 0.85
+    "minExposureUniformity": 0.85,
+    "maxDeadPixels": 0
   }
 }
-```
-### Prereqs
-- CMake >= 3.15
-- C++17 compiler
-- OpenCV (core, imgproc, imgcodecs)
+Each metric is evaluated against predefined thresholds, resulting in an objective PASS/FAIL decision.
 
-macOS (Homebrew):
-```bash
-brew install opencv cmake
-```
+Project Structure
+graphql
+Copy code
+endoqa_project/
+├── app/
+│   └── main.cpp            # CLI entry point
+├── lib/
+│   ├── metrics.cpp         # Image-quality algorithms
+│   ├── io.cpp              # Image loading and output
+│   └── report.cpp          # JSON report generation
+├── tests/
+│   └── test_metrics.cpp    # Unit tests
+├── docs/
+│   └── requirements.md     # Design and validation notes
+├── .clang-tidy             # Static analysis configuration
+└── CMakeLists.txt          # Build configuration
+Testing & Validation
+Each metric is validated using synthetic and controlled test cases:
 
-Ubuntu:
-```bash
-sudo apt-get install -y build-essential cmake libopencv-dev
-```
+Blurred vs. sharp images validate the sharpness metric
 
-### Configure & Build
-```bash
+Noisy vs. clean images validate noise detection
+
+Uneven lighting validates exposure-uniformity analysis
+
+Repeated frames validate dead-pixel detection
+
+All tests are executable via the endoqa_tests binary and must pass before deployment.
+
+Medical Device Relevance
+EndoQA reflects software practices used in regulated medical environments:
+
+Clear separation of computation and reporting
+
+Deterministic outputs for auditability
+
+Automated verification via unit tests
+
+Metrics aligned with optical and sensor performance
+
+Design consistent with IEC 62304 principles
+
+This makes the project directly applicable to imaging-system validation workflows at companies like Karl Storz.
+
+Build Instructions
+macOS
+bash
+Copy code
+brew install cmake opencv
+
+cd endoqa_project
 mkdir build && cd build
-cmake .. -DENDOQA_BUILD_TESTS=ON
+cmake .. -DOpenCV_DIR="$(brew --prefix opencv)/lib/cmake/opencv4"
 cmake --build . -j
-```
+Linux
+bash
+Copy code
+sudo apt-get update
+sudo apt-get install -y build-essential cmake libopencv-dev
 
-### Run
-Single frame:
-```bash
-./endoqa ../samples/frame1.jpg
-```
+cd endoqa_project
+mkdir build && cd build
+cmake ..
+cmake --build . -j
+Windows (PowerShell)
+powershell
+Copy code
+# Install Visual Studio Build Tools and CMake
+# Set OpenCV_DIR to your OpenCV installation path
 
-Multiple frames (enables dead pixel check & brightness trend):
-```bash
-./endoqa ../samples/frame1.jpg ../samples/frame2.jpg ../samples/frame3.jpg --report out.json
-cat out.json
-```
+mkdir build
+cd build
+cmake .. -DOpenCV_DIR="C:\path\to\opencv\build"
+cmake --build . --config Release
+Usage
+bash
+Copy code
+./endoqa frame1.jpg frame2.jpg --report report.json
+Run unit tests:
 
-Exit codes:
-- `0` — PASS
-- `2` — FAIL (threshold violation)
-
-## Tests
-```bash
+bash
+Copy code
 ./endoqa_tests
-```
+Future Improvements
+Color balance and white-balance drift detection
+
+Lens vignetting analysis
+
+Real-time video stream support
+
+GPU acceleration for embedded systems
+
+Qt-based visualization dashboard
+
+CI integration for automated regression testing
+
+
 
 ## Quality Hooks
 - `.clang-tidy` with modernize/readability/cppcoreguidelines
