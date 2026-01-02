@@ -85,21 +85,17 @@ EndoQA demonstrates how software can **quantitatively validate imaging performan
 Each metric is evaluated against predefined thresholds, resulting in an objective PASS/FAIL decision.
 
 Project Structure
-graphql
-Copy code
+
 endoqa_project/
-├── app/
-│   └── main.cpp            # CLI entry point
-├── lib/
-│   ├── metrics.cpp         # Image-quality algorithms
-│   ├── io.cpp              # Image loading and output
-│   └── report.cpp          # JSON report generation
-├── tests/
-│   └── test_metrics.cpp    # Unit tests
-├── docs/
-│   └── requirements.md     # Design and validation notes
-├── .clang-tidy             # Static analysis configuration
-└── CMakeLists.txt          # Build configuration
+├── app/                # Command-line application (main.cpp)
+├── lib/                # Core algorithms and helper modules
+├── tests/              # Unit tests (Doctest)
+├── docs/               # Requirements and traceability documentation
+├── .clang-tidy         # Static-analysis configuration
+└── CMakeLists.txt      # Build configuration
+
+
+
 Testing & Validation
 Each metric is validated using synthetic and controlled test cases:
 
