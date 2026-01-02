@@ -82,9 +82,11 @@ EndoQA demonstrates how software can **quantitatively validate imaging performan
     "maxDeadPixels": 0
   }
 }
+
+
 Each metric is evaluated against predefined thresholds, resulting in an objective PASS/FAIL decision.
 
-Project Structure
+## Project Structure
 
 endoqa_project/
 ├── app/                # Command-line application (main.cpp)
