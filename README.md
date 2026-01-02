@@ -82,63 +82,70 @@ EndoQA demonstrates how software can **quantitatively validate imaging performan
     "maxDeadPixels": 0
   }
 }
+```
 
 
 Each metric is evaluated against predefined thresholds, resulting in an objective PASS/FAIL decision.
 
+
 ## Project Structure
 
+```
 endoqa_project/
-├── app/                # Command-line application (main.cpp)
-├── lib/                # Core algorithms and helper modules
-├── tests/              # Unit tests (Doctest)
-├── docs/               # Requirements and traceability documentation
-├── .clang-tidy         # Static-analysis configuration
-└── CMakeLists.txt      # Build configuration
+├── app/
+│   └── main.cpp          # CLI entry point
+├── lib/
+│   ├── metrics.cpp       # Image-quality algorithms
+│   ├── io.cpp            # Image loading and output
+│   └── report.cpp        # JSON report generation
+├── tests/
+│   └── test_metrics.cpp  # Unit tests
+├── docs/
+│   └── requirements.md   # Design and validation notes
+├── .clang-tidy            # Static analysis configuration
+└── CMakeLists.txt         # Build configuration
+```
 
+## Testing & Validation
 
-
-Testing & Validation
 Each metric is validated using synthetic and controlled test cases:
 
-Blurred vs. sharp images validate the sharpness metric
+- Blurred vs. sharp images validate the sharpness metric
+- Noisy vs. clean images validate noise detection
+- Uneven lighting validates exposure-uniformity analysis
+- Repeated frames validate dead-pixel detection
 
-Noisy vs. clean images validate noise detection
+All tests are executable via the `endoqa_tests` binary and must pass before deployment.
 
-Uneven lighting validates exposure-uniformity analysis
+---
 
-Repeated frames validate dead-pixel detection
+## Medical Device Relevance
 
-All tests are executable via the endoqa_tests binary and must pass before deployment.
-
-Medical Device Relevance
 EndoQA reflects software practices used in regulated medical environments:
 
-Clear separation of computation and reporting
+- Clear separation of computation and reporting
+- Deterministic outputs for auditability
+- Automated verification via unit tests
+- Metrics aligned with optical and sensor performance
+- Design consistent with IEC 62304 principles
 
-Deterministic outputs for auditability
+This makes the project directly applicable to imaging-system validation workflows at companies like **Karl Storz**.
 
-Automated verification via unit tests
+## Build Instructions
 
-Metrics aligned with optical and sensor performance
+### macOS
 
-Design consistent with IEC 62304 principles
-
-This makes the project directly applicable to imaging-system validation workflows at companies like Karl Storz.
-
-Build Instructions
-macOS
-bash
-Copy code
+```bash
 brew install cmake opencv
 
 cd endoqa_project
 mkdir build && cd build
 cmake .. -DOpenCV_DIR="$(brew --prefix opencv)/lib/cmake/opencv4"
 cmake --build . -j
-Linux
-bash
-Copy code
+```
+
+### Linux
+```bash
 sudo apt-get update
 sudo apt-get install -y build-essential cmake libopencv-dev
 
@@ -146,38 +153,35 @@ cd endoqa_project
 mkdir build && cd build
 cmake ..
 cmake --build . -j
-Windows (PowerShell)
-powershell
-Copy code
+```
+
+### Windows (PowerShell)
+```bash 
 # Install Visual Studio Build Tools and CMake
 # Set OpenCV_DIR to your OpenCV installation path
 
+cd endoqa_project
 mkdir build
 cd build
 cmake .. -DOpenCV_DIR="C:\path\to\opencv\build"
 cmake --build . --config Release
-Usage
-bash
-Copy code
+```
+
+### Usage
+```bash
 ./endoqa frame1.jpg frame2.jpg --report report.json
+```
 Run unit tests:
-
-bash
-Copy code
+```bash
 ./endoqa_tests
-Future Improvements
-Color balance and white-balance drift detection
-
-Lens vignetting analysis
-
-Real-time video stream support
-
-GPU acceleration for embedded systems
-
-Qt-based visualization dashboard
-
-CI integration for automated regression testing
-
+```
+### Future Improvements
+- Color balance and white-balance drift detection
+- Lens vignetting analysis
+- Real-time video stream support
+- GPU acceleration for embedded systems
+- Qt-based visualization dashboard
+- CI integration for automated regression testing
 
 
 ## Quality Hooks
