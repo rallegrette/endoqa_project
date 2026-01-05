@@ -3,6 +3,7 @@
 #include <opencv2/imgproc.hpp>
 #include "lib/metrics.hpp"
 
+
 using namespace endoqa;
 
 static cv::Mat make_constant(int w, int h, uint8_t val) {
