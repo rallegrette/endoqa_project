@@ -7,7 +7,6 @@
 #include "lib/io.hpp"
 #include "lib/metrics.hpp"
 #include "lib/report.hpp"
-
 using namespace endoqa;
 
 static void usage() {
